@@ -1,0 +1,3 @@
+[submodule "btc/src/viabtc"]
+	path = btc/src/viabtc
+	url = https://github.com/viabtc/viabtc_exchange_server.git
