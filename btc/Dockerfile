@@ -2,10 +2,11 @@ FROM ubuntu:xenial AS btc-build
 
 MAINTAINER Guo Yukun
 
-RUN sed -i "s/archive.ubuntu./mirrors.aliyun./g" /etc/apt/sources.list
+#RUN sed -i "s/archive.ubuntu./mirrors.aliyun./g" /etc/apt/sources.list
 
 RUN apt-get update &&\
     apt-get install -y wget vim psmisc &&\
+    apt-get -y install git &&\
 	# 依赖包
 	apt-get -y install libev-dev libssl-dev libmpdec-dev libjansson-dev   libmysqlclient-dev &&\
  	# 安装构建工具
@@ -19,18 +20,22 @@ RUN apt-get update &&\
 WORKDIR /src/
 
 # 安装kafka
+#RUN apt-get update &&  apt-get -y install librdkafka-dev
+
 RUN wget https://codeload.github.com/edenhill/librdkafka/tar.gz/v0.11.3 -O  /src/librdkafka.tar.gz &&\
 	tar xzvf /src/librdkafka.tar.gz &&\
-	rm -rf /src/librdkafka.tar.gz
-#	mv librdkafka-* librdkafka &&\
+	rm -rf /src/librdkafka.tar.gz &&\
+	mv librdkafka-* librdkafka
 RUN ls /src/
-RUN	cd /src/librdkafka-* &&\
+RUN	cd /src/librdkafka &&\
   	./configure --prefix=/usr/local &&\
   	sed -i "s/WITH_LDS=/#WITH_LDS=/g" Makefile.config &&\
   	make &&\
   	make install
 
 # 安装 curl
+#RUN apt-get install curl
+
 RUN wget https://codeload.github.com/curl/curl/tar.gz/curl-7_57_0 -O /src/curl-7.57.0.tar.gz &&\
 	tar xzvf /src/curl-7.57.0.tar.gz &&\
 	rm -rf /src/curl-7.57.0.tar.gz &&\
@@ -41,14 +46,14 @@ RUN wget https://codeload.github.com/curl/curl/tar.gz/curl-7_57_0 -O /src/curl-7
 	make &&\
 	make install
 
+RUN apt-get update &&  apt-get -y install liblz4-dev
+
 ADD build.sh /src/build.sh
 
 # 编译viabtc
-RUN wget https://codeload.github.com/viabtc/viabtc_exchange_server/tar.gz/master -O /src/viabtc.tar.gz &&\
- 	tar xzvf /src/viabtc.tar.gz  &&\
- 	rm -rf /src/viabtc.tar.gz &&\
- 	mv viabtc_exchange_server-* viabtc &&\
-    cd /src/viabtc/network &&\
+COPY ./src/ /src/
+
+RUN cd /src/viabtc/network &&\
     make clean && make &&\
     cd /src/viabtc/depends/hiredis &&\
     make && make install &&\

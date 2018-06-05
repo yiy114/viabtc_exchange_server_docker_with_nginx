@@ -4,6 +4,13 @@ services:
   btc:
     container_name: btc-service
     build: ./btc/
+    volumes:
+      - "./btc/btc/matchengine/config.json:/btc/matchengine/config.json"
+      - "./btc/btc/accesshttp/config.json:/btc/accesshttp/config.json"
+      - "./btc/btc/marketprice/config.json:/btc/marketprice/config.json"
+      - "./btc/btc/accessws/config.json:/btc/accessws/config.json"
+      - "./btc/btc/alertcenter/config.json:/btc/alertcenter/config.json"
+      - "./btc/btc/readhistory/config.json:/btc/readhistory/config.json"
     ports:
       - "17416:7416"
       - "17316:7316"
