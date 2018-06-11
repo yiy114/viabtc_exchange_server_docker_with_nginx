@@ -22,13 +22,13 @@ services:
       - "18091:8091"
     depends_on:
       - mysql
-      - kafka
+      - mq
       - redis_sentinel
       - redis_slave
       - redis_master
     links:
       - mysql:db
-      - kafka:mq
+      - mq:mq
       - redis_sentinel
       - redis_slave
       - redis_master
@@ -71,7 +71,7 @@ services:
     ports:
       - "12181:2181"
 
-  kafka:
+  mq:
     container_name: btc-kafka
     image: wurstmeister/kafka
     links:
