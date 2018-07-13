@@ -12,6 +12,7 @@ services:
       - "./btc/btc/alertcenter/config.json:/btc/alertcenter/config.json"
       - "./btc/btc/readhistory/config.json:/btc/readhistory/config.json"
       - "./btc/tmp:/tmp/"
+      - "./logs:/var/logs/trade"
     ports:
       - "17416:7416"
       - "17316:7316"
