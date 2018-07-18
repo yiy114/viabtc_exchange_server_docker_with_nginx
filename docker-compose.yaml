@@ -3,7 +3,6 @@ version: '3'
 services:
   btc:
     container_name: btc-service
-    #command: "yes"
     privileged: true 
     build: ./btc/
     volumes:
@@ -15,6 +14,7 @@ services:
       - "./btc/btc/readhistory/config.json:/btc/readhistory/config.json"
       - "./btc/tmp:/tmp/"
       - "./logs:/var/logs/trade"
+      - "./btc/src/viabtc:/src/viabtc"
     ports:
       - "127.0.0.1:17416:7416"
       - "127.0.0.1:17316:7316"
@@ -38,27 +38,18 @@ services:
       - redis_sentinel
       - redis_slave
       - redis_master
-    networks:
-      - trade
-      - exchange 
     
   redis_master:
     container_name: btc-redis-master
     image: redis:4.0.2-alpine
     ports:
       - "127.0.0.1:16379:6379"
-    networks:
-      - trade
-
 
   redis_slave:
     container_name: btc-redis-slave
     image: redis:4.0.2-alpine
     ports:
       - "127.0.0.1:16380:6379"
-    networks:
-      - trade
-
 
   redis_sentinel:
     container_name: btc-redis-sentinel
@@ -73,27 +64,18 @@ services:
       - redis_master
     ports:
       - "127.0.0.1:26379:26379"
-    networks:
-      - trade
-
 
   mysql:
     container_name: btc-mysql
     build: ./db/
     ports:
       - "127.0.0.1:13306:3306"
-    networks:
-      - trade
-
 
   zookeeper:
     container_name: btc-zookeeper
     image: wurstmeister/zookeeper
     ports:
       - "127.0.0.1:12181:2181"
-    networks:
-      - trade
-
 
   mq:
     container_name: btc-kafka
@@ -108,9 +90,7 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    networks:
-      - trade 
-
+  
   nginx:
     image: nginx
     volumes:
@@ -118,13 +98,4 @@ services:
       - "./btc/tmp:/sockets"
     ports:
       - "8008:8008"
-
-networks:
-  trade:
-    driver: bridge
-  
-  exchange:
-    external:
-      name: laradock_backend
-
 
