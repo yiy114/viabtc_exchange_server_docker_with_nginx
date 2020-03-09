@@ -50,10 +50,13 @@ RUN apt-get update &&  apt-get -y install liblz4-dev
 
 ADD build.sh /src/build.sh
 
-# 编译viabtc
-COPY ./src/ /src/
 
-RUN cd /src/viabtc/network &&\
+# 编译viabtc
+RUN wget https://codeload.github.com/qyvlik/viabtc_exchange_server/tar.gz/master -O /src/viabtc.tar.gz &&\
+ 	tar xzvf /src/viabtc.tar.gz  &&\
+ 	rm -rf /src/viabtc.tar.gz &&\
+ 	mv viabtc_exchange_server-* viabtc &&\
+    cd /src/viabtc/network &&\
     make clean && make &&\
     cd /src/viabtc/depends/hiredis &&\
     make && make install &&\
