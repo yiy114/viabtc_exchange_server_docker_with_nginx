@@ -55,7 +55,7 @@
     ],
     "markets": [
          {
-            "name": "ETH_BTC",
+            "name": "ETHBTC",
             "stock": {
                 "name": "ETH",
                 "prec": 8
@@ -67,7 +67,7 @@
             "min_amount": "0.001"
         },
          {
-            "name": "BTC_USD",
+            "name": "BTCUSD",
             "stock": {
                 "name": "BTC",
                 "prec": 8
@@ -79,7 +79,7 @@
             "min_amount": "0.001"
         },
          {
-            "name": "ETH_USD",
+            "name": "ETHUSD",
             "stock": {
                 "name": "ETH",
                 "prec": 8
