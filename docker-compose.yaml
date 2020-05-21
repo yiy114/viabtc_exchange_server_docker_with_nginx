@@ -95,6 +95,8 @@ services:
     image: nginx
     volumes:
       - "./nginx/sites-enabled/socket.conf:/etc/nginx/conf.d/socket.conf"
+      #宿主机和容器之间的目录映射，保持一致，这样方便支持ssl，容器可以读宿主机的ssl文件#
+      - "/viabtc_exchange_server_docker_with_nginx/nginx/sites-enabled:/viabtc_exchange_server_docker_with_nginx/nginx/sites-enabled"
       - "./btc/tmp:/sockets"
     ports:
       - "8008:8008"
